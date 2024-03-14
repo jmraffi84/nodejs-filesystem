@@ -1,16 +1,25 @@
-const fs = require("fs")
-const express = require("express")
-const path = require("path")
-const { timeStamp } = require("console")
+import express from "express";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import path from "path";
+import fs from "fs";
+
+
+
+const PORT = 9000;
+
+const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const dirPath = path.join(__dirname, "timefile")
-const app = express()
-app.use(express.json()) // middleware
-// console.log(dirPath);
 
-
+app.get("/", (req, res) => {
+    res.send("Working Good")
+})
 
 app.get("/timestamp", (req, res) => {
-
+    console.log('I am Time stamp');
     let date = new Date();
     const timeStampDate = `Your Local Time : ${date.toLocaleTimeString().slice(0, -3)}`
     let content = timeStampDate;
@@ -23,13 +32,6 @@ app.get("/timestamp", (req, res) => {
 })
 
 
-// listen and start a http server in specific port
-app.listen(9000, () => console.log("I started on port 9000"));
 
-
-//  API documentation in post man docs
-
-// Created a collection named a Current time Stamp
-// then created get request in name of timestamp
-//  End Point : http://localhost:9000/timestamp
-//  Result : Your Local Time : 10:49:14
+// listen a server
+app.listen(PORT, () => console.log(`server started in localhost:${PORT}`));
