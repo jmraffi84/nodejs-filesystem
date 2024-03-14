@@ -19,9 +19,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/timestamp", (req, res) => {
-    console.log('I am Time stamp');
+
     let date = new Date();
-    const timeStampDate = `Your Local Time : ${date.toLocaleTimeString().slice(0, -3)}`
+    const timeStampDate = `Your Local Date and Time : ${date.toLocaleString()}`
     let content = timeStampDate;
     fs.writeFileSync(`${dirPath}/current-date-time.txt`, content, (err) => {
         if (err) {
@@ -31,6 +31,18 @@ app.get("/timestamp", (req, res) => {
     res.sendFile(path.join(dirPath, "current-date-time.txt"))
 })
 
+app.get("/text-files", (req, res) => {
+    fs.readdir(dirPath, (err, files) => {
+        if (err) {
+            console.error("Error reading directory:", err);
+            res.status(500).json({ message: "Internal server error" });
+            return;
+        }
+
+        const textFiles = files.filter(file => file.endsWith('.txt'));
+        res.json({ FilesData: textFiles });
+    });
+});
 
 
 // listen a server
